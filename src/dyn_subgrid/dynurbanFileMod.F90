@@ -48,7 +48,7 @@ contains
     !
     ! !USES:
     use dynTimeInfoMod , only : YEAR_POSITION_START_OF_TIMESTEP
-    use ncdio_pio      , only : check_dim_size
+    use ncdio_pio      , only : check_dim
     !
     ! !ARGUMENTS:
     type(bounds_type) , intent(in) :: bounds            ! proc-level bounds
@@ -73,7 +73,7 @@ contains
     ! prognostically, if urban areas are ever determined prognostically rather than
     ! prescribed ahead of time.
     dynurban_file = dyn_file_type(dynurban_filename, YEAR_POSITION_START_OF_TIMESTEP)
-    call check_dim_size(dynurban_file, 'numurbl', numurbl)
+    call check_dim(dynurban_file, 'numurbl', numurbl)
 
     ! read data PCT_URBAN
     !

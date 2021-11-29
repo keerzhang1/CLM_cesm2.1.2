@@ -12,7 +12,7 @@ module dynSubgridDriverMod
   use decompMod                    , only : bounds_type, BOUNDS_LEVEL_PROC, BOUNDS_LEVEL_CLUMP
   use decompMod                    , only : get_proc_clumps, get_clump_bounds
   use dynSubgridControlMod         , only : get_flanduse_timeseries
-  use dynSubgridControlMod         , only : get_do_transient_pfts, get_do_transient_crops, get_do_transient_lakes, &
+  use dynSubgridControlMod         , only : get_do_transient_pfts, get_do_transient_crops, &
                                             get_do_transient_urban
   use dynSubgridControlMod         , only : get_do_harvest
   use dynPriorWeightsMod           , only : prior_weights_type
