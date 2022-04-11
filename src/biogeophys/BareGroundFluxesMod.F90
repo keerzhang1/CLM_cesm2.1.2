@@ -118,6 +118,11 @@ contains
          dz                     => col%dz                                       , & ! Input:  [real(r8) (:,:) ]  layer depth (m)                                                     
          zii                    => col%zii                                      , & ! Input:  [real(r8) (:)   ]  convective boundary height [m]                                        
 
+         !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+         vap_ref2m_r            => humanindex_inst%vap_ref2m_r_patch            , & ! Output: [real(r8) (:)   ]  Rural 2 m height vapor pressure (Pa)
+         !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+
+
          tc_ref2m               => humanindex_inst%tc_ref2m_patch               , & ! Output: [real(r8) (:)   ]  2 m height surface air temperature (C)
          vap_ref2m              => humanindex_inst%vap_ref2m_patch              , & ! Output: [real(r8) (:)   ]  2 m height vapor pressure (Pa)
          appar_temp_ref2m       => humanindex_inst%appar_temp_ref2m_patch       , & ! Output: [real(r8) (:)   ]  2 m apparent temperature (C)
@@ -410,6 +415,11 @@ contains
   
             if (lun%itype(l) == istsoil .or. lun%itype(l) == istcrop) then
               wbt_ref2m_r(p)            = wbt_ref2m(p)
+
+              !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+              vap_ref2m_r(p)            = vap_ref2m(p)
+              !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+
               nws_hi_ref2m_r(p)         = nws_hi_ref2m(p)
               appar_temp_ref2m_r(p)     = appar_temp_ref2m(p)
               swbgt_ref2m_r(p)          = swbgt_ref2m(p)
