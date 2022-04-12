@@ -105,6 +105,8 @@ contains
 !         emv                     => temperature_inst%emv_patch              , & ! Input:  [real(r8) (:)   ]  vegetation emissivity
 !         t_veg                   => temperature_inst%t_veg_patch            , & ! Output: [real(r8) (:)   ]  vegetation temperature (Kelvin) 
          t_skin_patch            => temperature_inst%t_skin_patch           , & ! Output: [real(r8) (:)   ]  patch skin temperature (K)
+         t_skin_r_patch          => temperature_inst%t_skin_r_patch         , & ! Output: [real(r8) (:)   ]  rural skin temperature (K)
+         t_skin_u_patch          => temperature_inst%t_skin_u_patch         , & ! Output: [real(r8) (:)   ]  urban skin temperature (K)
          t_h2osfc                => temperature_inst%t_h2osfc_col           , & ! Input:  [real(r8) (:)   ]  surface water temperature               
          tssbef                  => temperature_inst%t_ssbef_col            , & ! Input:  [real(r8) (:,:) ]  soil/snow temperature before update   
          t_h2osfc_bef            => temperature_inst%t_h2osfc_bef_col       , & ! Input:  [real(r8) (:)   ]  saved surface water temperature         
@@ -420,8 +422,14 @@ contains
 !               t_skin_patch(p) = ((1._r8 - emv(p))*(1-frac_veg_nosno(p)) * sqrt(sqrt(lw_grnd)))  +  &
 !                                           emv(p) *   frac_veg_nosno(p)  * t_veg(p)
 !            end if
-             if(frac_veg_nosno(p).eq.0)  t_skin_patch(p) = sqrt(sqrt(lw_grnd))
-
+             if(frac_veg_nosno(p).eq.0) then
+                t_skin_patch(p) = sqrt(sqrt(lw_grnd))
+                if (lun%itype(l) == istsoil .or. lun%itype(l) == istcrop) then
+                   !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+                   t_skin_r_patch(p) = t_skin_patch(p)
+                   !-------------------------------------------------------------Where Keer Modified----------------------------------------------------------- 
+                end if               
+             end if
             eflx_lwrad_net(p) = eflx_lwrad_out(p) - forc_lwrad(c)
             if (lun%itype(l) == istsoil .or. lun%itype(l) == istcrop) then
                eflx_lwrad_net_r(p) = eflx_lwrad_out(p) - forc_lwrad(c)
@@ -448,6 +456,9 @@ contains
          c = patch%column(p)
          
          t_skin_patch(p) = t_soisno(c,col%snl(c)+1)
+         !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+         t_skin_u_patch(p) = t_skin_patch(p)
+         !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------                
   
       end do
 

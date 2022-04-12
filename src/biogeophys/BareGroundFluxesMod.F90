@@ -118,6 +118,11 @@ contains
          dz                     => col%dz                                       , & ! Input:  [real(r8) (:,:) ]  layer depth (m)                                                     
          zii                    => col%zii                                      , & ! Input:  [real(r8) (:)   ]  convective boundary height [m]                                        
 
+         !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+         vap_ref2m_r            => humanindex_inst%vap_ref2m_r_patch            , & ! Output: [real(r8) (:)   ]  Rural 2 m height vapor pressure (Pa)
+         !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+
+
          tc_ref2m               => humanindex_inst%tc_ref2m_patch               , & ! Output: [real(r8) (:)   ]  2 m height surface air temperature (C)
          vap_ref2m              => humanindex_inst%vap_ref2m_patch              , & ! Output: [real(r8) (:)   ]  2 m height vapor pressure (Pa)
          appar_temp_ref2m       => humanindex_inst%appar_temp_ref2m_patch       , & ! Output: [real(r8) (:)   ]  2 m apparent temperature (C)
@@ -196,7 +201,11 @@ contains
          t_ref2m_r              => temperature_inst%t_ref2m_r_patch             , & ! Output: [real(r8) (:)   ]  Rural 2 m height surface air temperature (Kelvin)                     
          t_veg                  => temperature_inst%t_veg_patch                 , & ! Output: [real(r8) (:)   ]  vegetation temperature (Kelvin)                                       
 
-         q_ref2m                => waterstate_inst%q_ref2m_patch                , & ! Output: [real(r8) (:)   ]  2 m height surface specific humidity (kg/kg)                          
+         q_ref2m                => waterstate_inst%q_ref2m_patch                , & ! Output: [real(r8) (:)   ]  2 m height surface specific humidity (kg/kg) 
+         !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+         q_ref2m_r              => waterstate_inst%q_ref2m_r_patch              , & ! Output: [real(r8) (:)   ]  Rural 2 m height surface specific humidity (kg/kg)
+         !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------  
+
          rh_ref2m_r             => waterstate_inst%rh_ref2m_r_patch             , & ! Output: [real(r8) (:)   ]  Rural 2 m height surface relative humidity (%)                        
          rh_ref2m               => waterstate_inst%rh_ref2m_patch               , & ! Output: [real(r8) (:)   ]  2 m height surface relative humidity (%)                              
 
@@ -386,8 +395,10 @@ contains
          rh_ref2m(p) = min(100._r8, q_ref2m(p) / qsat_ref2m * 100._r8)
 
          if (lun%itype(l) == istsoil .or. lun%itype(l) == istcrop) then
+            !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
             rh_ref2m_r(p) = rh_ref2m(p)
             t_ref2m_r(p) = t_ref2m(p)
+            q_ref2m_r(p)=q_ref2m(p)
          end if
 
          ! Human Heat Stress
@@ -410,6 +421,11 @@ contains
   
             if (lun%itype(l) == istsoil .or. lun%itype(l) == istcrop) then
               wbt_ref2m_r(p)            = wbt_ref2m(p)
+
+              !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+              vap_ref2m_r(p)            = vap_ref2m(p)
+              !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+
               nws_hi_ref2m_r(p)         = nws_hi_ref2m(p)
               appar_temp_ref2m_r(p)     = appar_temp_ref2m(p)
               swbgt_ref2m_r(p)          = swbgt_ref2m(p)

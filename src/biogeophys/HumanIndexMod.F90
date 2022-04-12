@@ -50,6 +50,9 @@ module HumanIndexMod
      real(r8), pointer :: tc_ref2m_patch              (:) ! Patch 2 m height surface air temperature (C)
      real(r8), pointer :: vap_ref2m_patch             (:) ! Patch 2 m height vapor pressure (Pa)
      real(r8), pointer :: appar_temp_ref2m_patch      (:) ! Patch 2 m apparent temperature (C)
+     !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+     real(r8), pointer :: vap_ref2m_r_patch           (:) ! Patch Rural 2 m height vapor pressure (Pa)
+     !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
      real(r8), pointer :: appar_temp_ref2m_r_patch    (:) ! Patch Rural 2 m apparent temperature (C)
      real(r8), pointer :: swbgt_ref2m_patch           (:) ! Patch 2 m Simplified Wetbulb Globe temperature (C)
      real(r8), pointer :: swbgt_ref2m_r_patch         (:) ! Patch Rural 2 m Simplified Wetbulb Globe temperature (C)
@@ -77,6 +80,10 @@ module HumanIndexMod
      real(r8), pointer :: swmp65_ref2m_r_patch        (:) ! Patch Rural 2 m Swamp Cooler temperature 65% effi (C)
      real(r8), pointer :: swmp80_ref2m_patch          (:) ! Patch 2 m Swamp Cooler temperature 80% effi (C)
      real(r8), pointer :: swmp80_ref2m_r_patch        (:) ! Patch Rural 2 m Swamp Cooler temperature 80% effi (C)
+     !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+     real(r8), pointer :: vap_ref2m_u_patch           (:) ! Patch Urban 2 m height vapor pressure (Pa)
+     !-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------  
+
      real(r8), pointer :: appar_temp_ref2m_u_patch    (:) ! Patch Urban 2 m apparent temperature (C)
      real(r8), pointer :: swbgt_ref2m_u_patch         (:) ! Patch Urban 2 m Simplified Wetbulb Globe temperature (C)
      real(r8), pointer :: humidex_ref2m_u_patch       (:) ! Patch Urban 2 m Humidex (C)
@@ -202,6 +209,12 @@ subroutine InitAllocate(this, bounds)
     begp = bounds%begp; endp= bounds%endp
 
     allocate(this%vap_ref2m_patch              (begp:endp))                    ; this%vap_ref2m_patch             (:)  = nan
+
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+    allocate(this%vap_ref2m_r_patch            (begp:endp))                    ; this%vap_ref2m_r_patch           (:)  = nan
+    allocate(this%vap_ref2m_u_patch            (begp:endp))                    ; this%vap_ref2m_u_patch           (:)  = nan
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+
     allocate(this%tc_ref2m_patch               (begp:endp))                    ; this%tc_ref2m_patch              (:)  = nan
     allocate(this%humidex_ref2m_patch          (begp:endp))                    ; this%humidex_ref2m_patch         (:)  = nan
     allocate(this%humidex_ref2m_u_patch        (begp:endp))                    ; this%humidex_ref2m_u_patch       (:)  = nan
@@ -346,6 +359,24 @@ subroutine InitHistory(this, bounds)
        call hist_addfld1d (fname='APPAR_TEMP_R', units='C',  &
                avgflag='A', long_name='Rural 2 m apparent temperature', &
                ptr_patch=this%appar_temp_ref2m_r_patch, set_spec=spval)
+
+
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+       this%vap_ref2m_patch(begp:endp) = spval
+       call hist_addfld1d (fname='VAPOR_PRES', units='Pa',  &
+               avgflag='A', long_name='2 m vapor pressure', &
+               ptr_patch=this%vap_ref2m_patch)
+
+       this%vap_ref2m_u_patch(begp:endp) = spval
+       call hist_addfld1d (fname='VAPOR_PRES_U', units='Pa',  &
+               avgflag='A', long_name='Urban 2 m vapor pressure', &
+               ptr_patch=this%vap_ref2m_u_patch, set_nourb=spval)
+
+       this%vap_ref2m_r_patch(begp:endp) = spval
+       call hist_addfld1d (fname='VAPOR_PRES_R', units='Pa',  &
+               avgflag='A', long_name='Rural 2 m vapor pressure', &
+               ptr_patch=this%vap_ref2m_r_patch, set_spec=spval)
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
 
        this%wb_ref2m_patch(begp:endp) = spval
        call hist_addfld1d (fname='WBA', units='C',  &
