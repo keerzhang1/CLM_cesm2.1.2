@@ -259,7 +259,10 @@ contains
          h2osoi_ice          =>   waterstate_inst%h2osoi_ice_col            , & ! Input:  [real(r8) (:,:) ]  ice lens (kg/m2)                                
          h2osoi_liq          =>   waterstate_inst%h2osoi_liq_col            , & ! Input:  [real(r8) (:,:) ]  liquid water (kg/m2)                            
          qaf                 =>   waterstate_inst%qaf_lun                   , & ! Output: [real(r8) (:)   ]  urban canopy air specific humidity (kg/kg)        
-         q_ref2m             =>   waterstate_inst%q_ref2m_patch             , & ! Output: [real(r8) (:)   ]  2 m height surface specific humidity (kg/kg)      
+         q_ref2m             =>   waterstate_inst%q_ref2m_patch             , & ! Output: [real(r8) (:)   ]  2 m height surface specific humidity (kg/kg)  
+         !-------------------------------------------------------------Where Keer Modified---------------------------------------------------------
+         q_ref2m_u           => waterstate_inst%q_ref2m_u_patch             , & ! Output: [real(r8) (:)   ]  Urban 2 m height surface specific humidity (kg/kg)
+         !-------------------------------------------------------------Where Keer Modified--------------------------------------------------------               
          rh_ref2m            =>   waterstate_inst%rh_ref2m_patch            , & ! Output: [real(r8) (:)   ]  2 m height surface relative humidity (%)          
          rh_ref2m_u          =>   waterstate_inst%rh_ref2m_u_patch          , & ! Output: [real(r8) (:)   ]  2 m height surface relative humidity (%)          
 
@@ -861,7 +864,9 @@ contains
          call QSat(t_ref2m(p), forc_pbot(g), e_ref2m, de2mdT, qsat_ref2m, dqsat2mdT)
          rh_ref2m(p) = min(100._r8, q_ref2m(p) / qsat_ref2m * 100._r8)
          rh_ref2m_u(p) = rh_ref2m(p)
-
+         !-------------------------------------------------------------Where Keer Modified---------------------------------------------------------
+         q_ref2m_u(p) = q_ref2m(p)
+         !-------------------------------------------------------------Where Keer Modified---------------------------------------------------------
          ! Human Heat Stress
          if ( all_human_stress_indices .or. fast_human_stress_indices )then
             call KtoC(t_ref2m(p), tc_ref2m(p))

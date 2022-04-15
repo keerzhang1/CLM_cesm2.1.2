@@ -67,6 +67,10 @@ module WaterstateType
      real(r8), pointer :: sno_liq_top_col        (:)   ! col snow liquid water fraction (mass), top layer  [fraction]
 
      real(r8), pointer :: q_ref2m_patch          (:)   ! patch 2 m height surface specific humidity (kg/kg)
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------     
+     real(r8), pointer :: q_ref2m_r_patch        (:)   ! patch 2 m height surface specific humidity - rural (kg/kg)
+     real(r8), pointer :: q_ref2m_u_patch        (:)   ! patch 2 m height surface specific humidity - urban (kg/kg)
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------     
      real(r8), pointer :: rh_ref2m_patch         (:)   ! patch 2 m height surface relative humidity (%)
      real(r8), pointer :: rh_ref2m_r_patch       (:)   ! patch 2 m height surface relative humidity - rural (%)
      real(r8), pointer :: rh_ref2m_u_patch       (:)   ! patch 2 m height surface relative humidity - urban (%)
@@ -218,6 +222,10 @@ contains
     allocate(this%dqgdT_col              (begc:endc))                     ; this%dqgdT_col              (:)   = nan   
     allocate(this%qaf_lun                (begl:endl))                     ; this%qaf_lun                (:)   = nan
     allocate(this%q_ref2m_patch          (begp:endp))                     ; this%q_ref2m_patch          (:)   = nan
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+    allocate(this%q_ref2m_u_patch        (begp:endp))                     ; this%q_ref2m_u_patch        (:)   = nan
+    allocate(this%q_ref2m_r_patch        (begp:endp))                     ; this%q_ref2m_r_patch        (:)   = nan
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------      
     allocate(this%rh_ref2m_patch         (begp:endp))                     ; this%rh_ref2m_patch         (:)   = nan
     allocate(this%rh_ref2m_u_patch       (begp:endp))                     ; this%rh_ref2m_u_patch       (:)   = nan
     allocate(this%rh_ref2m_r_patch       (begp:endp))                     ; this%rh_ref2m_r_patch       (:)   = nan
@@ -399,6 +407,18 @@ contains
     call hist_addfld1d (fname='Q2M', units='kg/kg',  &
          avgflag='A', long_name='2m specific humidity', &
          ptr_patch=this%q_ref2m_patch)
+
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
+    this%q_ref2m_r_patch(begp:endp) = spval
+    call hist_addfld1d (fname='Q2M_R', units='kg/kg',  &
+         avgflag='A', long_name='Rural 2m specific humidity', &
+         ptr_patch=this%q_ref2m_r_patch, set_spec=spval, default='inactive')
+
+    this%q_ref2m_u_patch(begp:endp) = spval
+    call hist_addfld1d (fname='Q2M_U', units='kg/kg',  &
+         avgflag='A', long_name='Urban 2m specific humidity', &
+         ptr_patch=this%q_ref2m_u_patch, set_nourb=spval, default='inactive')
+!-------------------------------------------------------------Where Keer Modified-----------------------------------------------------------
 
     this%rh_ref2m_patch(begp:endp) = spval
     call hist_addfld1d (fname='RH2M', units='%',  &
